@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="profilestyles.css">
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Ensure proper background and visibility */
+        body {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                        linear-gradient(to bottom, #14532d, #14532d, #14532d) !important;
+            min-height: 100vh;
+        }
+        .dashboard-container {
+            background: transparent !important;
+        }
+        .main-content {
+            background: transparent !important;
+            padding: 2rem;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -14,6 +29,7 @@
             <div class="nav-container">
                 <div class="nav-logo">
                     <img src="67Logo.jpg" alt="67Logo" class="logo-icon-img">
+                    <img src="Kitchen.png" alt="Kitchen" class="logo-icon-img kitchen-logo">
                 </div>
                 <div class="nav-actions">
                     <button class="nav-btn" id="homeBtn" title="Home">
@@ -180,9 +196,41 @@
         </main>
     </div>
 
-    <script src="profilescript.js"></script>
     <script type="module" src="voicecommand-wakeword.js"></script>
     <script>
+        // Navigation button handlers - Add at the top before chart code
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Analytics page loaded');
+            
+            // Setup navigation buttons
+            const homeBtn = document.getElementById('homeBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            
+            if (homeBtn) {
+                homeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Home button clicked');
+                    window.location.href = 'profile.html';
+                });
+            }
+            
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Logout button clicked');
+                    window.location.href = 'test.html';
+                });
+            }
+            
+            if (settingsBtn) {
+                settingsBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Settings page coming soon!');
+                });
+            }
+        });
+        
         // Simple chart rendering using Canvas
         const ctx = document.getElementById('activityChart').getContext('2d');
         const chartData = {
@@ -241,25 +289,15 @@
         window.addEventListener('load', drawChart);
         window.addEventListener('resize', drawChart);
 
-        // Time filter functionality
-        document.getElementById('timeFilter').addEventListener('change', function() {
-            // Update chart data based on selection
-            console.log('Time filter changed to:', this.value);
-            // In a real app, you would fetch new data and redraw the chart
-        });
-
-        // Navbar button handlers
-        document.getElementById('homeBtn').addEventListener('click', function() {
-            window.location.href = 'profile.html';
-        });
-
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            window.location.href = 'test.html';
-        });
-
-        document.getElementById('settingsBtn').addEventListener('click', function() {
-            alert('Settings page coming soon!');
-        });
+        // Time filter functionality (if element exists)
+        const timeFilter = document.getElementById('timeFilter');
+        if (timeFilter) {
+            timeFilter.addEventListener('change', function() {
+                // Update chart data based on selection
+                console.log('Time filter changed to:', this.value);
+                // In a real app, you would fetch new data and redraw the chart
+            });
+        }
     </script>
 </body>
 </html>

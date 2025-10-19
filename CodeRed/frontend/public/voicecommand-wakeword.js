@@ -295,9 +295,12 @@ class VoiceCommandWakeWord {
       console.log('👂 Wake word check:', transcript);
       
       // Check if wake word is detected and not already activating
-      if (transcript.includes(this.wakeWord) && !this.isActivating && !this.conversationMode) {
+      // ALSO check if AI is not currently speaking
+      if (transcript.includes(this.wakeWord) && !this.isActivating && !this.conversationMode && !this.isSpeaking) {
         console.log('🎉 Wake word detected! Starting conversation mode...');
         this.activateConversation();
+      } else if (this.isSpeaking) {
+        console.log('⚠️ Wake word detected but AI is speaking, ignoring');
       }
     };
 
@@ -358,6 +361,12 @@ class VoiceCommandWakeWord {
   }
 
   startSpeechRecognition() {
+    // CRITICAL: Don't start if AI is speaking
+    if (this.isSpeaking) {
+      console.log('⚠️ AI is speaking, cannot start listening yet');
+      return;
+    }
+    
     // Don't start if already recording or if we've hit restart limit
     if (this.isRecording) {
       console.log('⚠️ Already recording, skipping start');
@@ -400,6 +409,12 @@ class VoiceCommandWakeWord {
     };
 
     this.recognition.onresult = (event) => {
+      // CRITICAL: Ignore any speech if AI is speaking
+      if (this.isSpeaking) {
+        console.log('⚠️ Ignoring speech input - AI is currently speaking');
+        return;
+      }
+      
       let transcript = '';
       for (let i = event.resultIndex; i < event.results.length; i++) {
         transcript += event.results[i][0].transcript;
@@ -496,6 +511,18 @@ class VoiceCommandWakeWord {
       const data = await response.json();
       console.log('✅ Backend response:', data);
       
+      // CRITICAL: Stop listening immediately when we get a response
+      // This ensures we don't listen while preparing to speak
+      if (this.recognition && this.isRecording) {
+        console.log('🛑 Stopping listening - AI response received');
+        try {
+          this.recognition.stop();
+          this.isRecording = false;
+        } catch (e) {
+          console.warn('⚠️ Error stopping recognition:', e);
+        }
+      }
+      
       // Display text response in popup
       this.showStatus('📤 You said:', text, `🤖 Assistant: ${data.text || data.response || 'No response'}`);
       
@@ -557,13 +584,30 @@ class VoiceCommandWakeWord {
     }
   }
 
+  /**
+   * Play audio response from the AI
+   * IMPORTANT: This method ensures the AI stops listening when it speaks
+   * to prevent it from hearing and responding to its own voice
+   */
   playAudio(audioBase64) {
     return new Promise((resolve, reject) => {
       try {
-        // Stop any currently playing audio
+        // CRITICAL: Stop any currently playing audio
         if (this.currentAudio) {
           this.currentAudio.pause();
           this.currentAudio = null;
+        }
+        
+        // CRITICAL: Stop speech recognition BEFORE starting to speak
+        // This prevents the AI from hearing itself
+        if (this.recognition && this.isRecording) {
+          console.log('🛑 Stopping speech recognition - AI is about to speak');
+          try {
+            this.recognition.stop();
+            this.isRecording = false;
+          } catch (e) {
+            console.warn('⚠️ Error stopping recognition:', e);
+          }
         }
         
         this.isSpeaking = true;

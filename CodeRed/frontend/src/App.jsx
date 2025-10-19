@@ -25,11 +25,6 @@ const CodeRed = () => {
   const [waitlistVisible, setWaitlistVisible] = useState(false);
   
   useEffect(() => {
-    // Redirect to test.html immediately
-    window.location.href = '/test.html';
-  }, []);
-  
-  useEffect(() => {
     // Fade in the title on page load
     setFadeIn(true);
     

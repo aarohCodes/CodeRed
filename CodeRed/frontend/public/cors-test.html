@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test for Grocery Image Upload</h1>
+    <button id="testBtn">Test CORS Connection</button>
+    <button id="uploadBtn">Test File Upload</button>
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    <pre id="output"></pre>
+
+    <script>
+        const output = document.getElementById('output');
+        
+        // Test basic CORS connection
+        document.getElementById('testBtn').addEventListener('click', async () => {
+            output.textContent = 'Testing CORS connection...\n';
+            try {
+                const response = await fetch('http://localhost:8000/food_inventory', {
+                    method: 'GET'
+                });
+                const data = await response.json();
+                output.textContent += `✅ SUCCESS! Got ${data.length} items\n`;
+                output.textContent += `Response: ${JSON.stringify(data, null, 2)}\n`;
+            } catch (err) {
+                output.textContent += `❌ ERROR: ${err.message}\n`;
+                console.error('CORS test error:', err);
+            }
+        });
+
+        // Test file upload
+        document.getElementById('uploadBtn').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            output.textContent = 'Testing file upload to /scan_grocery_image...\n';
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                output.textContent += `File: ${file.name} (${file.type}, ${file.size} bytes)\n`;
+                output.textContent += `Uploading to http://localhost:8000/scan_grocery_image...\n`;
+                
+                const response = await fetch('http://localhost:8000/scan_grocery_image', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                output.textContent += `Response status: ${response.status} ${response.statusText}\n`;
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    output.textContent += `❌ ERROR Response: ${errorText}\n`;
+                } else {
+                    const data = await response.json();
+                    output.textContent += `✅ SUCCESS!\n`;
+                    output.textContent += `Items detected: ${data.items_added?.length || 0}\n`;
+                    output.textContent += `Response: ${JSON.stringify(data, null, 2)}\n`;
+                }
+            } catch (err) {
+                output.textContent += `❌ FETCH ERROR: ${err.message}\n`;
+                output.textContent += `Error type: ${err.name}\n`;
+                console.error('Upload error:', err);
+            }
+        });
+    </script>
+</body>
+</html>

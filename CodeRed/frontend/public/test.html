@@ -365,69 +365,120 @@
 
         <script src="testscripts.js"></script>
         <script>
-            // Sign In Modal functionality
-            const loginBtn = document.getElementById('loginBtn');
-            const signInModal = document.getElementById('signInModal');
-            const closeModal = document.getElementById('closeModal');
-            const signInForm = document.getElementById('signInForm');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
+            // Sign In Modal functionality - Wrapped in DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', function() {
+                const loginBtn = document.getElementById('loginBtn');
+                const signInModal = document.getElementById('signInModal');
+                const closeModal = document.getElementById('closeModal');
+                const signInForm = document.getElementById('signInForm');
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
 
-            // Open modal when login button is clicked
-            if (loginBtn) {
-                loginBtn.addEventListener('click', () => {
-                    signInModal.style.display = 'flex';
-                });
-            }
+                console.log('Sign-in modal initialized:', { loginBtn, signInModal, signInForm });
 
-            // Close modal
-            closeModal.addEventListener('click', () => {
-                signInModal.style.display = 'none';
-                signInForm.reset();
-            });
-
-            // Close modal when clicking outside
-            signInModal.addEventListener('click', (e) => {
-                if (e.target === signInModal) {
-                    signInModal.style.display = 'none';
-                    signInForm.reset();
+                // Open modal when login button is clicked
+                if (loginBtn) {
+                    loginBtn.addEventListener('click', () => {
+                        console.log('Login button clicked');
+                        signInModal.style.display = 'flex';
+                    });
                 }
-            });
 
-            // Handle form submission
-            signInForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const username = usernameInput.value;
-                const password = passwordInput.value;
-                
-                // Here you can add authentication logic
-                console.log('Sign in attempt:', { username, password });
-                
-                // Redirect to profile page
-                window.location.href = 'profile.html';
-            });
+                // Close modal
+                if (closeModal) {
+                    closeModal.addEventListener('click', () => {
+                        console.log('Close modal clicked');
+                        signInModal.style.display = 'none';
+                        signInForm.reset();
+                    });
+                }
 
-            // Input focus effects
-            const inputs = document.querySelectorAll('#signInModal input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', () => {
-                    input.style.borderColor = '#3FF67C';
-                    input.style.outline = 'none';
+                // Close modal when clicking outside
+                if (signInModal) {
+                    signInModal.addEventListener('click', (e) => {
+                        if (e.target === signInModal) {
+                            console.log('Clicked outside modal');
+                            signInModal.style.display = 'none';
+                            signInForm.reset();
+                        }
+                    });
+                }
+
+                // Handle form submission
+                if (signInForm) {
+                    console.log('Setting up form submit listener');
+                    signInForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Form submitted!');
+                        
+                        const username = usernameInput.value;
+                        const password = passwordInput.value;
+                        
+                        console.log('Sign in attempt:', { username, password });
+                        
+                        // Basic validation
+                        if (!username || !password) {
+                            alert('Please fill in all fields');
+                            return false;
+                        }
+                        
+                        // Show loading state
+                        const submitBtn = signInForm.querySelector('button[type="submit"]');
+                        if (submitBtn) {
+                            submitBtn.innerHTML = 'Signing in... <i class="fas fa-spinner fa-spin"></i>';
+                            submitBtn.disabled = true;
+                        }
+                        
+                        // Simulate authentication delay
+                        setTimeout(() => {
+                            console.log('Redirecting to profile.html NOW');
+                            try {
+                                window.location.href = 'profile.html';
+                            } catch (err) {
+                                console.error('Redirect error:', err);
+                                // Fallback
+                                window.location.replace('profile.html');
+                            }
+                        }, 500);
+                        
+                        return false;
+                    });
+                    
+                    // Backup: Direct button click listener
+                    const submitBtn = signInForm.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        console.log('Submit button found, adding click listener');
+                        submitBtn.addEventListener('click', (e) => {
+                            console.log('Submit button clicked directly');
+                        });
+                    }
+                }
+
+                // Input focus effects
+                const inputs = document.querySelectorAll('#signInModal input');
+                inputs.forEach(input => {
+                    input.addEventListener('focus', () => {
+                        input.style.borderColor = '#3FF67C';
+                        input.style.outline = 'none';
+                    });
+                    input.addEventListener('blur', () => {
+                        input.style.borderColor = '#e5e5e5';
+                    });
                 });
-                input.addEventListener('blur', () => {
-                    input.style.borderColor = '#e5e5e5';
-                });
-            });
 
-            // Close modal button hover effect
-            closeModal.addEventListener('mouseenter', () => {
-                closeModal.style.background = '#f0f0f0';
-                closeModal.style.color = '#3FF67C';
-            });
-            closeModal.addEventListener('mouseleave', () => {
-                closeModal.style.background = 'none';
-                closeModal.style.color = '#666';
-            });
+                // Close modal button hover effect
+                if (closeModal) {
+                    closeModal.addEventListener('mouseenter', () => {
+                        closeModal.style.background = '#f0f0f0';
+                        closeModal.style.color = '#3FF67C';
+                    });
+                    closeModal.addEventListener('mouseleave', () => {
+                        closeModal.style.background = 'none';
+                        closeModal.style.color = '#666';
+                    });
+                }
+            }); // End of DOMContentLoaded
         </script>
     </body>
 </html>

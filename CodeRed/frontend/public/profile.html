@@ -22,9 +22,10 @@
             <div class="nav-container">
                 <div class="nav-logo">
                     <img src="67Logo.jpg" alt="67Logo" class="logo-icon-img">
+                    <img src="Kitchen.png" alt="Kitchen" class="logo-icon-img kitchen-logo">
                 </div>
                 <div class="nav-actions">
-                    <button class="nav-btn" id="analyticsBtn" title="Analytics & Stats">
+                    <button class="nav-btn" id="analyticsBtn" title="Analytics & Stats" onclick="location.href='analytics.html'; return false;">
                         <i class="fas fa-chart-line"></i>
                     </button>
                     <button class="nav-btn" id="homeBtn" title="Home">
@@ -57,7 +58,10 @@
                     <div class="dashboard-card inventory-card">
                         <div class="card-header">
                             <h2><i class="fas fa-box-open"></i> Inventory Overview</h2>
-                            <button class="card-action-btn"><i class="fas fa-plus"></i></button>
+                            <div class="card-header-actions">
+                                <button class="card-action-btn" id="scanGroceryBtn" title="Scan Receipt/Grocery"><i class="fas fa-camera"></i></button>
+                                <button class="card-action-btn" id="addInventoryBtn" title="Add Item"><i class="fas fa-plus"></i></button>
+                            </div>
                         </div>
                         <div class="card-content">
                             <div class="inventory-stats">
@@ -142,7 +146,7 @@
                         <div class="card-content">
                             <div class="recipe-list">
                                 <div class="recipe-item">
-                                    <img src="https://via.placeholder.com/80" alt="Recipe" class="recipe-thumb">
+                                    <div class="recipe-thumb" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); display: flex; align-items: center; justify-content: center; font-size: 2rem;">🐟</div>
                                     <div class="recipe-info">
                                         <h4>Garlic Butter Salmon</h4>
                                         <p>Yesterday • 25 mins</p>
@@ -150,7 +154,7 @@
                                     <button class="icon-btn"><i class="fas fa-redo"></i></button>
                                 </div>
                                 <div class="recipe-item">
-                                    <img src="https://via.placeholder.com/80" alt="Recipe" class="recipe-thumb">
+                                    <div class="recipe-thumb" style="background: linear-gradient(135deg, #51cf66, #37b24d); display: flex; align-items: center; justify-content: center; font-size: 2rem;">🥗</div>
                                     <div class="recipe-info">
                                         <h4>Vegetable Stir-Fry</h4>
                                         <p>2 days ago • 20 mins</p>
@@ -158,7 +162,7 @@
                                     <button class="icon-btn"><i class="fas fa-redo"></i></button>
                                 </div>
                                 <div class="recipe-item">
-                                    <img src="https://via.placeholder.com/80" alt="Recipe" class="recipe-thumb">
+                                    <div class="recipe-thumb" style="background: linear-gradient(135deg, #ffd43b, #fab005); display: flex; align-items: center; justify-content: center; font-size: 2rem;">🍝</div>
                                     <div class="recipe-info">
                                         <h4>Pasta Carbonara</h4>
                                         <p>3 days ago • 30 mins</p>
@@ -248,12 +252,267 @@
             </div>
         </main>
 
-        <script src="profilescript.js"></script>
         <script type="module" src="voicecommand-wakeword.js"></script>
         <script>
-            // Analytics button navigation
-            document.getElementById('analyticsBtn').addEventListener('click', function() {
-                window.location.href = 'analytics.html';
+            // Wait for DOM to be fully loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM loaded, setting up analytics button...');
+                
+                // Analytics button navigation - set up after DOM loads
+                const analyticsBtn = document.getElementById('analyticsBtn');
+                if (analyticsBtn) {
+                    console.log('Analytics button found!');
+                    analyticsBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Analytics button clicked - navigating to analytics.html');
+                        window.location.href = '/analytics.html';
+                    });
+                } else {
+                    console.error('Analytics button not found!');
+                }
+            });
+
+            // Scan Grocery Image Upload
+            document.getElementById('scanGroceryBtn').addEventListener('click', function() {
+                // Create hidden file input
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'image/*';
+                fileInput.capture = 'environment'; // Use camera on mobile
+                
+                fileInput.addEventListener('change', async function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    // Show loading overlay
+                    const loadingOverlay = document.createElement('div');
+                    loadingOverlay.className = 'loading-overlay';
+                    loadingOverlay.innerHTML = `
+                        <div class="loading-content">
+                            <div class="loading-spinner"></div>
+                            <h3>Scanning Grocery Image...</h3>
+                            <p>Detecting items with AI 🤖</p>
+                        </div>
+                    `;
+                    document.body.appendChild(loadingOverlay);
+                    
+                    try {
+                        await uploadGroceryImage(file);
+                    } catch (err) {
+                        console.error('Upload error:', err);
+                    } finally {
+                        loadingOverlay.remove();
+                    }
+                });
+                
+                fileInput.click();
+            });
+
+            async function uploadGroceryImage(file) {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    const response = await fetch('http://localhost:8000/scan_grocery_image', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to scan image');
+                    }
+                    
+                    const data = await response.json();
+                    console.log('📸 Scan result:', data);
+                    
+                    // Show success with items added
+                    if (data.items_added && data.items_added.length > 0) {
+                        const itemsList = data.items_added.join(', ');
+                        const successModal = document.createElement('div');
+                        successModal.className = 'modal-overlay';
+                        successModal.innerHTML = `
+                            <div class="modal-content success-modal">
+                                <div class="success-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <h2>Items Detected!</h2>
+                                <p class="success-message">Successfully added ${data.items_added.length} item(s):</p>
+                                <div class="detected-items">
+                                    ${data.items_added.map(item => `
+                                        <div class="detected-item">
+                                            <i class="fas fa-check"></i>
+                                            <span>${item}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <button class="btn-primary" onclick="this.closest('.modal-overlay').remove()">
+                                    <i class="fas fa-thumbs-up"></i> Got it!
+                                </button>
+                            </div>
+                        `;
+                        document.body.appendChild(successModal);
+                        
+                        // Auto-close after 5 seconds
+                        setTimeout(() => {
+                            if (successModal.parentElement) {
+                                successModal.remove();
+                            }
+                        }, 5000);
+                        
+                        // Reload inventory to show new items
+                        loadInventory();
+                    } else {
+                        // No items detected
+                        const warningToast = document.createElement('div');
+                        warningToast.className = 'warning-toast';
+                        warningToast.innerHTML = `
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>No items detected in image. Try a clearer photo.</span>
+                        `;
+                        document.body.appendChild(warningToast);
+                        setTimeout(() => warningToast.remove(), 4000);
+                    }
+                    
+                } catch (err) {
+                    console.error('❌ Error uploading image:', err);
+                    
+                    // Show error toast
+                    const errorToast = document.createElement('div');
+                    errorToast.className = 'error-toast';
+                    errorToast.innerHTML = `
+                        <i class="fas fa-times-circle"></i>
+                        <span>Failed to scan image. Check backend connection.</span>
+                    `;
+                    document.body.appendChild(errorToast);
+                    setTimeout(() => errorToast.remove(), 4000);
+                }
+            }
+
+            // Add Inventory Item Modal
+            document.getElementById('addInventoryBtn').addEventListener('click', function() {
+                const modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2><i class="fas fa-plus-circle"></i> Add Inventory Item</h2>
+                            <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <form id="addInventoryForm" class="modal-form">
+                            <div class="form-group">
+                                <label for="itemName">
+                                    <i class="fas fa-apple-alt"></i> Item Name *
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="itemName" 
+                                    name="itemName" 
+                                    placeholder="e.g., Chicken, Milk, Carrots" 
+                                    required
+                                    autocomplete="off"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="itemQuantity">
+                                    <i class="fas fa-hashtag"></i> Quantity *
+                                </label>
+                                <input 
+                                    type="number" 
+                                    id="itemQuantity" 
+                                    name="itemQuantity" 
+                                    placeholder="1" 
+                                    min="1"
+                                    value="1"
+                                    required
+                                >
+                            </div>
+                            <div class="form-group">
+                                <label for="itemExpiry">
+                                    <i class="fas fa-calendar-alt"></i> Expiry Date (Optional)
+                                </label>
+                                <input 
+                                    type="date" 
+                                    id="itemExpiry" 
+                                    name="itemExpiry"
+                                >
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="this.closest('.modal-overlay').remove()">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-check"></i> Add Item
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                // Focus on the name input
+                document.getElementById('itemName').focus();
+                
+                // Handle form submission
+                document.getElementById('addInventoryForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const name = document.getElementById('itemName').value.trim();
+                    const quantity = parseInt(document.getElementById('itemQuantity').value);
+                    const expiryDate = document.getElementById('itemExpiry').value || null;
+                    
+                    try {
+                        const response = await fetch('http://localhost:8000/add_food', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                name: name,
+                                quantity: quantity,
+                                expiry_date: expiryDate,
+                                user_id: "1" // You can make this dynamic based on logged-in user
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Failed to add item');
+                        }
+                        
+                        const result = await response.json();
+                        console.log('✅ Item added:', result);
+                        
+                        // Show success message
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'success-toast';
+                        successMsg.innerHTML = `
+                            <i class="fas fa-check-circle"></i> 
+                            <span>${name} added successfully!</span>
+                        `;
+                        document.body.appendChild(successMsg);
+                        
+                        setTimeout(() => successMsg.remove(), 3000);
+                        
+                        // Close modal
+                        modal.remove();
+                        
+                        // Reload inventory
+                        loadInventory();
+                        
+                    } catch (err) {
+                        console.error('❌ Error adding item:', err);
+                        alert('Failed to add item. Please check your backend connection.');
+                    }
+                });
+                
+                // Close modal on outside click
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                });
             });
 
             // Fetch and display inventory
@@ -427,6 +686,23 @@
             
             // Refresh inventory every 30 seconds
             setInterval(loadInventory, 30000);
+            
+            // Ensure analytics button works - run after everything else
+            setTimeout(function() {
+                const analyticsBtn = document.getElementById('analyticsBtn');
+                if (analyticsBtn) {
+                    console.log('Re-attaching analytics button listener...');
+                    // Remove any existing listeners and add new one
+                    const newBtn = analyticsBtn.cloneNode(true);
+                    analyticsBtn.parentNode.replaceChild(newBtn, analyticsBtn);
+                    newBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Analytics button clicked! Navigating to analytics.html');
+                        window.location.href = '/analytics.html';
+                    });
+                }
+            }, 100);
         </script>
     </body>
 </html>
