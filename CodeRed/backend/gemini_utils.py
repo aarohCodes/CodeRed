@@ -26,3 +26,30 @@ def get_factual_recipe(ingredient: str):
 
     response = model.generate_content(prompt)
     return response.text
+
+def get_kitchen_intent_response(user_query, ingredient):
+    prompt = (
+        "You are a smart kitchen assistant. "
+        "If the user's message is about buying groceries, output a valid Python list of the item names they bought, named 'items_to_add'. "
+        "Otherwise, provide a conversational, accurate kitchen response to their command. "
+        f"User's inventory: {ingredient}. "
+        f"User's voice command: {user_query}. "
+        "Respond in this format:\n"
+        "items_to_add = [...]\n"
+        "assistant_response = \"Construct a friendly reply here.\""
+    )
+    model = genai.GenerativeModel('models/gemini-2.5-flash')
+    response = model.generate_content(prompt)
+    text = response.text
+
+    # Parse items_to_add list from Gemini's response
+    try:
+        items_line = next(line for line in text.splitlines() if line.startswith("items_to_add"))
+        items = eval(items_line.split("=")[1].strip())
+    except Exception:
+        items = []
+
+    reply_line = next((line for line in text.splitlines() if line.startswith("assistant_response")), "")
+    assistant_reply = reply_line.split("=",1)[-1].strip().strip('"')
+
+    return {"items_to_add": items, "reply": assistant_reply or text}

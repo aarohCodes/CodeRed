@@ -850,3 +850,121 @@ body {
         top: -10px;
     }
 }
+
+/* AI Response Styles */
+.ai-response-container {
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    background: var(--light-orange);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.ai-response-placeholder {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+}
+
+.ai-response-placeholder i {
+    font-size: 3rem;
+    color: var(--primary-orange);
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+.ai-response-placeholder p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.placeholder-subtext {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.ai-response-text {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-orange);
+    box-shadow: var(--shadow);
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+.ai-response-text h3 {
+    color: var(--primary-orange);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.ai-response-text p {
+    margin-bottom: 1rem;
+}
+
+.ai-response-text ul,
+.ai-response-text ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.ai-response-text li {
+    margin-bottom: 0.5rem;
+}
+
+.ai-response-text strong {
+    color: var(--dark-orange);
+    font-weight: 700;
+}
+
+.user-query {
+    background: var(--secondary-orange);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--cyan);
+}
+
+.user-query-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.user-query-text {
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.ai-response-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--light-orange);
+}
+
+.ai-response-header i {
+    color: var(--primary-orange);
+    font-size: 1.2rem;
+}
+
+.ai-response-header span {
+    font-weight: 700;
+    color: var(--dark-orange);
+}
+
+#clearRecipeBtn {
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+#clearRecipeBtn:hover {
+    opacity: 1;
+    background: rgba(239, 68, 68, 0.1);
+}

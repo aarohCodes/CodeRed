@@ -62,33 +62,23 @@
                         <div class="card-content">
                             <div class="inventory-stats">
                                 <div class="stat-box">
-                                    <div class="stat-number">24</div>
+                                    <div class="stat-number" id="totalItems">0</div>
                                     <div class="stat-label">Total Items</div>
                                 </div>
                                 <div class="stat-box">
-                                    <div class="stat-number warning">5</div>
+                                    <div class="stat-number warning" id="expiringSoon">0</div>
                                     <div class="stat-label">Expiring Soon</div>
                                 </div>
                                 <div class="stat-box">
-                                    <div class="stat-number success">12</div>
+                                    <div class="stat-number success" id="freshItems">0</div>
                                     <div class="stat-label">Fresh Items</div>
                                 </div>
                             </div>
-                            <div class="inventory-list">
+                            <div class="inventory-list" id="inventoryList">
                                 <div class="inventory-item">
-                                    <span class="item-icon">🥕</span>
-                                    <span class="item-name">Carrots</span>
-                                    <span class="item-expiry warning">2 days</span>
-                                </div>
-                                <div class="inventory-item">
-                                    <span class="item-icon">🥛</span>
-                                    <span class="item-name">Milk</span>
-                                    <span class="item-expiry">5 days</span>
-                                </div>
-                                <div class="inventory-item">
-                                    <span class="item-icon">🍗</span>
-                                    <span class="item-name">Chicken</span>
-                                    <span class="item-expiry">7 days</span>
+                                    <span class="item-icon">📦</span>
+                                    <span class="item-name">Loading inventory...</span>
+                                    <span class="item-expiry"></span>
                                 </div>
                             </div>
                             <button class="view-all-btn">View All Items <i class="fas fa-arrow-right"></i></button>
@@ -99,25 +89,18 @@
                     <div class="dashboard-card recipe-card">
                         <div class="card-header">
                             <h2><i class="fas fa-utensils"></i> Recipe Assistant</h2>
-                            <button class="card-action-btn"><i class="fas fa-sync-alt"></i></button>
+                            <button class="card-action-btn" id="clearRecipeBtn" title="Clear"><i class="fas fa-times"></i></button>
                         </div>
                         <div class="card-content">
-                            <div class="current-recipe">
-                                <h3>Chicken Stir-Fry</h3>
-                                <div class="recipe-progress">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 60%"></div>
-                                    </div>
-                                    <span class="progress-text">Step 3 of 5</span>
-                                </div>
-                                <div class="recipe-step">
-                                    <span class="step-number">3</span>
-                                    <p>Heat oil in wok, add chicken and cook until golden brown (4-5 minutes)</p>
+                            <div id="aiResponseContainer" class="ai-response-container">
+                                <div class="ai-response-placeholder">
+                                    <i class="fas fa-robot"></i>
+                                    <p>Ask me anything! Say "Hey Kitchen" to start.</p>
+                                    <p class="placeholder-subtext">I can help with recipes, cooking tips, and ingredient suggestions.</p>
                                 </div>
                             </div>
-                            <div class="recipe-actions">
-                                <button class="btn-secondary"><i class="fas fa-backward"></i> Previous</button>
-                                <button class="btn-primary">Next <i class="fas fa-forward"></i></button>
+                            <div id="aiResponseText" class="ai-response-text" style="display: none;">
+                                <!-- AI response will be displayed here -->
                             </div>
                         </div>
                     </div>
@@ -266,12 +249,184 @@
         </main>
 
         <script src="profilescript.js"></script>
-        <script type="module" src="voicecommand-standalone.js"></script>
+        <script type="module" src="voicecommand-wakeword.js"></script>
         <script>
             // Analytics button navigation
             document.getElementById('analyticsBtn').addEventListener('click', function() {
                 window.location.href = 'analytics.html';
             });
+
+            // Fetch and display inventory
+            async function loadInventory() {
+                try {
+                    const response = await fetch('http://localhost:8000/food_inventory');
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch inventory');
+                    }
+                    
+                    const items = await response.json();
+                    console.log('📦 Loaded inventory:', items);
+                    
+                    // Update stats
+                    updateInventoryStats(items);
+                    
+                    // Update inventory list
+                    displayInventoryItems(items);
+                } catch (err) {
+                    console.error('❌ Error loading inventory:', err);
+                    document.getElementById('inventoryList').innerHTML = `
+                        <div class="inventory-item">
+                            <span class="item-icon">⚠️</span>
+                            <span class="item-name">Unable to load inventory</span>
+                            <span class="item-expiry">Check backend connection</span>
+                        </div>
+                    `;
+                }
+            }
+
+            function updateInventoryStats(items) {
+                const totalItems = items.length;
+                const today = new Date();
+                
+                let expiringSoon = 0;
+                let freshItems = 0;
+                
+                items.forEach(item => {
+                    if (item.expiry_date) {
+                        const expiryDate = new Date(item.expiry_date);
+                        const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                        
+                        if (daysUntilExpiry <= 3 && daysUntilExpiry >= 0) {
+                            expiringSoon++;
+                        } else if (daysUntilExpiry > 7) {
+                            freshItems++;
+                        }
+                    } else {
+                        freshItems++; // No expiry date means it's probably fresh/shelf-stable
+                    }
+                });
+                
+                document.getElementById('totalItems').textContent = totalItems;
+                document.getElementById('expiringSoon').textContent = expiringSoon;
+                document.getElementById('freshItems').textContent = freshItems;
+            }
+
+            function displayInventoryItems(items) {
+                const inventoryList = document.getElementById('inventoryList');
+                
+                if (items.length === 0) {
+                    inventoryList.innerHTML = `
+                        <div class="inventory-item">
+                            <span class="item-icon">📭</span>
+                            <span class="item-name">No items in inventory</span>
+                            <span class="item-expiry">Add items to get started</span>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Sort by expiry date (soonest first)
+                const sortedItems = [...items].sort((a, b) => {
+                    if (!a.expiry_date) return 1;
+                    if (!b.expiry_date) return -1;
+                    return new Date(a.expiry_date) - new Date(b.expiry_date);
+                });
+                
+                // Show only first 5 items
+                const displayItems = sortedItems.slice(0, 5);
+                const today = new Date();
+                
+                inventoryList.innerHTML = displayItems.map(item => {
+                    const icon = getItemIcon(item.name);
+                    let expiryText = '';
+                    let expiryClass = '';
+                    
+                    if (item.expiry_date) {
+                        const expiryDate = new Date(item.expiry_date);
+                        const daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+                        
+                        if (daysUntilExpiry < 0) {
+                            expiryText = 'Expired';
+                            expiryClass = 'expired';
+                        } else if (daysUntilExpiry === 0) {
+                            expiryText = 'Today';
+                            expiryClass = 'warning';
+                        } else if (daysUntilExpiry === 1) {
+                            expiryText = '1 day';
+                            expiryClass = 'warning';
+                        } else if (daysUntilExpiry <= 3) {
+                            expiryText = `${daysUntilExpiry} days`;
+                            expiryClass = 'warning';
+                        } else {
+                            expiryText = `${daysUntilExpiry} days`;
+                            expiryClass = '';
+                        }
+                    } else {
+                        expiryText = 'No expiry';
+                        expiryClass = '';
+                    }
+                    
+                    return `
+                        <div class="inventory-item">
+                            <span class="item-icon">${icon}</span>
+                            <span class="item-name">${item.name} ${item.quantity > 1 ? `(${item.quantity})` : ''}</span>
+                            <span class="item-expiry ${expiryClass}">${expiryText}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            function getItemIcon(itemName) {
+                const name = itemName.toLowerCase();
+                
+                // Vegetables
+                if (name.includes('carrot')) return '🥕';
+                if (name.includes('tomato')) return '🍅';
+                if (name.includes('potato')) return '🥔';
+                if (name.includes('onion')) return '🧅';
+                if (name.includes('garlic')) return '🧄';
+                if (name.includes('pepper') || name.includes('bell')) return '🫑';
+                if (name.includes('broccoli')) return '🥦';
+                if (name.includes('lettuce') || name.includes('salad')) return '🥬';
+                if (name.includes('corn')) return '🌽';
+                if (name.includes('mushroom')) return '🍄';
+                
+                // Fruits
+                if (name.includes('apple')) return '🍎';
+                if (name.includes('banana')) return '🍌';
+                if (name.includes('orange')) return '🍊';
+                if (name.includes('lemon')) return '🍋';
+                if (name.includes('strawberry')) return '🍓';
+                if (name.includes('grape')) return '🍇';
+                if (name.includes('watermelon')) return '🍉';
+                
+                // Proteins
+                if (name.includes('chicken')) return '🍗';
+                if (name.includes('beef') || name.includes('steak')) return '🥩';
+                if (name.includes('fish')) return '🐟';
+                if (name.includes('egg')) return '🥚';
+                if (name.includes('bacon')) return '🥓';
+                
+                // Dairy
+                if (name.includes('milk')) return '🥛';
+                if (name.includes('cheese')) return '🧀';
+                if (name.includes('butter')) return '🧈';
+                if (name.includes('yogurt')) return '🥛';
+                
+                // Bread & Grains
+                if (name.includes('bread')) return '🍞';
+                if (name.includes('rice')) return '🍚';
+                if (name.includes('pasta')) return '🍝';
+                
+                // Default
+                return '🥘';
+            }
+
+            // Load inventory when page loads
+            document.addEventListener('DOMContentLoaded', loadInventory);
+            
+            // Refresh inventory every 30 seconds
+            setInterval(loadInventory, 30000);
         </script>
     </body>
 </html>
