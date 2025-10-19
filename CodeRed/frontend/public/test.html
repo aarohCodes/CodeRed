@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI-powered meal planner with voice cooking assistant.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="teststyle.css" />
+        <link   
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+        <script src="https://webgazer.cs.brown.edu/webgazer.js"></script>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="67Logo.jpg" alt="67Logo" class="logo-icon-img">
+                    <img src="Kitchen.png" alt="Second Logo" class="logo-icon-img kitchen-logo">
+                </div>
+                <div class="nav-actions">
+                    <button id="loginBtn" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Your Personal Chef. Your Smart Kitchen. Your Better Life.</h1>
+                    <p class="hero-subtitle">
+                        AI that understands your kitchen as well as you do. Scan your groceries with your camera, plan meals with your voice, and cook with confidence—all powered by intelligence that learns how you eat. 
+                    </p>
+                    <div class="hero-actions">
+                        <button id="startReadingBtn" class="btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            Start Cooking!
+                        </button>
+                        <button class="btn-secondary">
+                            <i class="fas fa-play-circle"></i>
+                            Watch Demo 
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-card" onclick="window.location.href='Dashboard.html'" style="cursor: pointer;">
+                        <i class="fas fa-laptop"></i>
+                        <span>Upcoming Features</span>
+                    </div>
+                    <div class="floating-card">
+                        <i class="fas fa-book-open"></i>
+                        <span>Further Reading</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h2>Meal planning should be effortless</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                        <h3>Food Detective</h3>
+                        <p>
+                            "What's for dinner?" It's 7 PM. You're staring into the fridge. Again. Those vegetables you bought three days ago are looking suspicious.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bowl-food"></i>
+                        </div>
+                        <h3>Recipe Rabbit Hole</h3>
+                        <p>
+                            You found the perfect recipe. But do you have cumin? Is paprika the same as cayenne? Why does this need 47 ingredients you've never heard of?
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3>Dreaded Grocery Guessing Game</h3>
+                        <p>
+                            $200 at the grocery store. Half of it will probably go bad. You're not sure what you'll actually cook. But hey, at least you bought those organic kale chips.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="voice-query" id="voiceSection">
+            <div class="container">
+                <div class="voice-interface">
+                    <h2>We get it. Meal planning shouldn't feel like homework.</h2>
+                    <p style="margin-bottom: 0.5rem;">There has to be a better way.</p>
+                    <p style="font-size: 3rem; font-weight: 600; margin-top: 0;">And now, there is.</p>
+
+                    <div class="stats-preview">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-book"></i></div>
+                            <div class="stat-number" id="wordsCount" style="font-size: 1.2rem; color: #4A4A4A;">See ingredients, understand possibilities</div>
+                            <div class="stat-label" style="color: #6abaa0;">Instant Recognition</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                            <div class="stat-number" id="kidsCount" style="font-size: 1.2rem; color: #4A4A4A;">Adapts to your taste and lifestyle</div>
+                            <div class="stat-label" style="color: #6abaa0;">Smart Learning</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                            <div class="stat-number" id="starsCount" style="font-size: 1.2rem; color: #4A4A4A;">Cooking made simple and joyful</div>
+                            <div class="stat-label" style="color: #6abaa0;">Thoughtful Guidance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="app-footer">
+            <div class="container">
+                <p>Made with ❤️ for healthy eaters</p>
+            </div>
+        </footer>
+
+        <!-- Auth Modal -->
+        <div id="authModal" class="auth-modal">
+            <div class="modal-slider">
+                <!-- Initial Screen -->
+                <div class="auth-modal-content slide-center" id="initialScreen">
+                    <span class="close-modal">&times;</span>
+                    <h2>Welcome to<br>67 Kitchen!</h2>
+                    <p class="modal-subtitle">Choose how you'd like to continue</p>
+                    <div class="auth-buttons">
+                        <button class="auth-btn signup-btn" id="showSignupForm">
+                            <i class="fas fa-user-plus"></i>
+                            Sign Up
+                        </button>
+                        <button class="auth-btn signin-btn">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Sign In
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sign Up Form Screen -->
+                <div class="auth-modal-content slide-right" id="signupFormScreen">
+                    <span class="close-modal">&times;</span>
+                    <h2>Create Account</h2>
+                    <p class="modal-subtitle">Tell us about yourself</p>
+                    <form class="signup-form" id="signupForm">
+                        <input type="text" id="signupName" placeholder="Full Name" required class="form-input">
+                        <input type="email" id="signupEmail" placeholder="Email Address" required class="form-input">
+                        <input type="tel" id="signupPhone" placeholder="Phone Number" required class="form-input">
+                        <button type="submit" class="auth-btn signup-btn">
+                            Continue
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="back-btn" id="backToInitial">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Skill Level Screen -->
+                <div class="auth-modal-content slide-right" id="skillLevelScreen">
+                    <span class="close-modal">&times;</span>
+                    <h2>Cooking Experience</h2>
+                    <p class="modal-subtitle">What's your skill level in the kitchen?</p>
+                    <form class="skill-form" id="skillForm">
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="skillLevel" value="beginner" required>
+                                <span class="radio-label">
+                                    <i class="fas fa-seedling"></i>
+                                    <strong>Beginner</strong>
+                                    <small>Just starting out</small>
+                                </span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="skillLevel" value="intermediate" required>
+                                <span class="radio-label">
+                                    <i class="fas fa-fire"></i>
+                                    <strong>Intermediate</strong>
+                                    <small>Comfortable in the kitchen</small>
+                                </span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="skillLevel" value="expert" required>
+                                <span class="radio-label">
+                                    <i class="fas fa-crown"></i>
+                                    <strong>Expert</strong>
+                                    <small>Master chef level</small>
+                                </span>
+                            </label>
+                        </div>
+                        <button type="submit" class="auth-btn signup-btn">
+                            Continue
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="back-btn" id="backToSignupForm">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Storage Locations Screen -->
+                <div class="auth-modal-content slide-right" id="storageLocationScreen">
+                    <span class="close-modal">&times;</span>
+                    <h2>Storage Locations</h2>
+                    <p class="modal-subtitle">This helps us track your inventory better</p>
+                    <form class="storage-form" id="storageForm">
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="storage" value="pantry">
+                                <span class="checkbox-label">
+                                    <i class="fas fa-box"></i>
+                                    <strong>Pantry</strong>
+                                    <small>Dry goods & canned items</small>
+                                </span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="storage" value="freezer">
+                                <span class="checkbox-label">
+                                    <i class="fas fa-snowflake"></i>
+                                    <strong>Freezer</strong>
+                                    <small>Frozen foods & meats</small>
+                                </span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="storage" value="spice-rack">
+                                <span class="checkbox-label">
+                                    <i class="fas fa-pepper-hot"></i>
+                                    <strong>Spice Rack</strong>
+                                    <small>Herbs & seasonings</small>
+                                </span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="storage" value="refrigerator">
+                                <span class="checkbox-label">
+                                    <i class="fas fa-temperature-low"></i>
+                                    <strong>Refrigerator</strong>
+                                    <small>Fresh produce & dairy</small>
+                                </span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="storage" value="countertop">
+                                <span class="checkbox-label">
+                                    <i class="fas fa-apple-alt"></i>
+                                    <strong>Countertop</strong>
+                                    <small>Fresh fruits & vegetables</small>
+                                </span>
+                            </label>
+                        </div>
+                        <button type="submit" class="auth-btn signup-btn">
+                            Continue
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="back-btn" id="backToSkillLevel">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Nutrition Goals Screen -->
+                <div class="auth-modal-content slide-right" id="nutritionGoalsScreen">
+                    <span class="close-modal">&times;</span>
+                    <h2>Nutrition Goals</h2>
+                    <p class="modal-subtitle">Set your daily nutrition targets</p>
+                    <form class="nutrition-form" id="nutritionForm">
+                        <div class="nutrition-inputs">
+                            <div class="nutrition-input-group">
+                                <label for="caloriesInput">
+                                    <i class="fas fa-fire"></i>
+                                    Calories
+                                </label>
+                                <input type="number" id="caloriesInput" name="calories" value="2000" required class="form-input">
+                                <span class="input-unit">kcal</span>
+                            </div>
+                            <div class="nutrition-input-group">
+                                <label for="proteinInput">
+                                    <i class="fas fa-drumstick-bite"></i>
+                                    Protein
+                                </label>
+                                <input type="number" id="proteinInput" name="protein" value="150" required class="form-input">
+                                <span class="input-unit">g</span>
+                            </div>
+                            <div class="nutrition-input-group">
+                                <label for="carbsInput">
+                                    <i class="fas fa-bread-slice"></i>
+                                    Carbs
+                                </label>
+                                <input type="number" id="carbsInput" name="carbs" value="250" required class="form-input">
+                                <span class="input-unit">g</span>
+                            </div>
+                            <div class="nutrition-input-group">
+                                <label for="fatInput">
+                                    <i class="fas fa-cheese"></i>
+                                    Fat
+                                </label>
+                                <input type="number" id="fatInput" name="fat" value="65" required class="form-input">
+                                <span class="input-unit">g</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-btn signup-btn">
+                            Get Started
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button type="button" class="back-btn" id="backToStorage">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign In Modal -->
+        <div id="signInModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+            <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 400px; width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                <button id="closeModal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: #666; cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s ease;">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🍳</div>
+                    <h2 style="color: #1a1a1a; margin-bottom: 0.5rem; font-size: 1.75rem;">Welcome Back!</h2>
+                    <p style="color: #666; font-size: 0.875rem;">Sign in to access your kitchen dashboard</p>
+                </div>
+
+                <form id="signInForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="username" style="color: #1a1a1a; font-weight: 600; font-size: 0.875rem;">Name</label>
+                        <input type="text" id="username" name="username" required style="padding: 0.75rem 1rem; border: 2px solid #e5e5e5; border-radius: 10px; font-size: 1rem; font-family: 'Atkinson Hyperlegible', sans-serif; transition: all 0.3s ease;">
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="password" style="color: #1a1a1a; font-weight: 600; font-size: 0.875rem;">Password</label>
+                        <input type="password" id="password" name="password" required style="padding: 0.75rem 1rem; border: 2px solid #e5e5e5; border-radius: 10px; font-size: 1rem; font-family: 'Atkinson Hyperlegible', sans-serif; transition: all 0.3s ease;">
+                    </div>
+
+                    <button type="submit" style="padding: 1rem; background: #3FF67C; color: white; border: none; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: 'Atkinson Hyperlegible', sans-serif;">
+                        Sign In
+                        <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </button>
+
+                    <div style="text-align: center; margin-top: 0.5rem;">
+                        <a href="#" style="color: #3FF67C; text-decoration: none; font-size: 0.875rem; font-weight: 600;">Forgot password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="testscripts.js"></script>
+        <script>
+            // Sign In Modal functionality
+            const loginBtn = document.getElementById('loginBtn');
+            const signInModal = document.getElementById('signInModal');
+            const closeModal = document.getElementById('closeModal');
+            const signInForm = document.getElementById('signInForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            // Open modal when login button is clicked
+            if (loginBtn) {
+                loginBtn.addEventListener('click', () => {
+                    signInModal.style.display = 'flex';
+                });
+            }
+
+            // Close modal
+            closeModal.addEventListener('click', () => {
+                signInModal.style.display = 'none';
+                signInForm.reset();
+            });
+
+            // Close modal when clicking outside
+            signInModal.addEventListener('click', (e) => {
+                if (e.target === signInModal) {
+                    signInModal.style.display = 'none';
+                    signInForm.reset();
+                }
+            });
+
+            // Handle form submission
+            signInForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                
+                // Here you can add authentication logic
+                console.log('Sign in attempt:', { username, password });
+                
+                // Redirect to profile page
+                window.location.href = 'profile.html';
+            });
+
+            // Input focus effects
+            const inputs = document.querySelectorAll('#signInModal input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.borderColor = '#3FF67C';
+                    input.style.outline = 'none';
+                });
+                input.addEventListener('blur', () => {
+                    input.style.borderColor = '#e5e5e5';
+                });
+            });
+
+            // Close modal button hover effect
+            closeModal.addEventListener('mouseenter', () => {
+                closeModal.style.background = '#f0f0f0';
+                closeModal.style.color = '#3FF67C';
+            });
+            closeModal.addEventListener('mouseleave', () => {
+                closeModal.style.background = 'none';
+                closeModal.style.color = '#666';
+            });
+        </script>
+    </body>
+</html>

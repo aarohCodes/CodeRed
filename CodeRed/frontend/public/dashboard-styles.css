@@ -1,0 +1,800 @@
+/* Dashboard Specific Styles for profile.html */
+
+/* Welcome Section - Updated */
+.welcome-section {
+    margin-bottom: 2rem;
+}
+
+.welcome-card {
+    background: var(--card-background);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border);
+}
+
+.welcome-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.welcome-title span {
+    color: var(--primary-orange);
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Dashboard Card Base */
+.dashboard-card {
+    background: var(--card-background);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--light-orange);
+}
+
+.card-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-header h2 i {
+    color: var(--primary-orange);
+}
+
+.card-action-btn {
+    background: var(--light-orange);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card-action-btn:hover {
+    background: var(--primary-orange);
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* Inventory Card */
+.inventory-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 1rem;
+    background: var(--light-orange);
+    border-radius: 12px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-orange);
+}
+
+.stat-number.warning {
+    color: #f59e0b;
+}
+
+.stat-number.success {
+    color: var(--green);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.inventory-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--cream);
+    border-radius: 10px;
+}
+
+.item-icon {
+    font-size: 1.5rem;
+}
+
+.item-name {
+    flex: 1;
+    font-weight: 600;
+}
+
+.item-expiry {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    padding: 0.25rem 0.75rem;
+    background: white;
+    border-radius: 20px;
+}
+
+.item-expiry.warning {
+    background: #fef3c7;
+    color: #f59e0b;
+}
+
+.view-all-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--primary-orange);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.view-all-btn:hover {
+    background: var(--dark-orange);
+}
+
+/* Recipe Card */
+.current-recipe {
+    margin-bottom: 1.5rem;
+}
+
+.current-recipe h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.recipe-progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--light-orange);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-orange), var(--green));
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.recipe-step {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--cream);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: var(--primary-orange);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.recipe-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-secondary,
+.btn-primary {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-secondary {
+    background: var(--light-orange);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--secondary-orange);
+}
+
+.btn-primary {
+    background: var(--primary-orange);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--dark-orange);
+}
+
+/* Voice Card */
+.voice-status {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.voice-indicator {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 3px solid var(--primary-orange);
+    border-radius: 50%;
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.voice-indicator i {
+    font-size: 2rem;
+    color: var(--primary-orange);
+    z-index: 1;
+}
+
+.voice-message {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.recent-commands {
+    text-align: left;
+}
+
+.recent-commands h4 {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.command-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--cream);
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+}
+
+.command-item i {
+    color: var(--primary-orange);
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Recent Recipes */
+.recipe-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.recipe-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--cream);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.recipe-item:hover {
+    background: var(--light-orange);
+}
+
+.recipe-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.recipe-info {
+    flex: 1;
+}
+
+.recipe-info h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.recipe-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--light-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.icon-btn:hover {
+    background: var(--primary-orange);
+    color: white;
+    border-color: var(--primary-orange);
+}
+
+/* Grocery List */
+.grocery-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.grocery-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--cream);
+    border-radius: 10px;
+}
+
+.grocery-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--primary-orange);
+}
+
+.grocery-item label {
+    flex: 1;
+    cursor: pointer;
+}
+
+.grocery-item label.checked {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.grocery-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 2px solid var(--light-orange);
+}
+
+.btn-primary-small {
+    padding: 0.5rem 1rem;
+    background: var(--primary-orange);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.btn-primary-small:hover {
+    background: var(--dark-orange);
+}
+
+/* Meal Planner */
+.week-view {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.day-card {
+    flex: 0 0 200px;
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.day-card.today {
+    background: var(--light-orange);
+    border: 2px solid var(--primary-orange);
+}
+
+.day-header {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.today-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--primary-orange);
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.meal-slot {
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.meal-slot.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+    background: transparent;
+}
+
+.meal-type {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.meal-name {
+    display: block;
+    font-weight: 600;
+}
+
+.add-meal-btn {
+    background: var(--light-orange);
+    border: 2px dashed var(--primary-orange);
+    color: var(--primary-orange);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.add-meal-btn:hover {
+    background: var(--primary-orange);
+    color: white;
+    border-style: solid;
+}
+
+/* Analytics Card */
+.time-filter {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--light-orange);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.analytics-stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--cream);
+    border-radius: 10px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.stat-icon.purple {
+    background: #a855f7;
+}
+
+.stat-icon.green {
+    background: var(--green);
+}
+
+.stat-icon.orange {
+    background: #f59e0b;
+}
+
+.stat-icon.blue {
+    background: var(--cyan);
+}
+
+.stat-details {
+    flex: 1;
+}
+
+.stat-details .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-details .stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0;
+}
+
+.chart-placeholder {
+    padding: 1.5rem;
+    background: var(--cream);
+    border-radius: 10px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Analytics Page Specific Styles */
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.stat-trend {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.stat-trend.positive {
+    color: var(--green);
+}
+
+.stat-trend.negative {
+    color: #ef4444;
+}
+
+.detailed-stats {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border);
+}
+
+.detailed-stats h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.stats-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--cream);
+    border-radius: 8px;
+}
+
+.stat-category {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.stat-value-text {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Goals */
+.goal-item {
+    margin-bottom: 1.5rem;
+}
+
+.goal-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.goal-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.goal-progress-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--cream);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* Achievements */
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--cream);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.achievement-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.achievement-info {
+    flex: 1;
+}
+
+.achievement-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.achievement-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .inventory-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .week-view {
+        flex-direction: column;
+    }
+    
+    .day-card {
+        flex: 1 1 auto;
+    }
+    
+    .recipe-actions {
+        flex-direction: column;
+    }
+}
