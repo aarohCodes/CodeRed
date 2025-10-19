@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics & Stats - 67 Kitchen</title>
+    <link rel="stylesheet" href="profilestyles.css">
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="67Logo.jpg" alt="67Logo" class="logo-icon-img">
+                </div>
+                <div class="nav-actions">
+                    <button class="nav-btn" id="homeBtn" title="Home">
+                        <i class="fas fa-home"></i>
+                    </button>
+                    <button class="nav-btn" id="settingsBtn" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="nav-btn" id="logoutBtn" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="welcome-section" style="text-align: center;">
+                <h1 style="color: white;">📊 Analytics & Stats</h1>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="analytics-card full-width">
+                    <div class="card-header" style="justify-content: center;">
+                        <h1 style="color: white;"></i> 📊 Your Kitchen Performance</h1>
+                    </div>
+                    <div class="card-content">
+                        <div class="analytics-grid">
+                            <div class="analytics-stat">
+                                <div class="stat-icon purple"><i class="fas fa-utensils"></i></div>
+                                <div class="stat-details">
+                                    <div class="stat-value">23</div>
+                                    <div class="stat-label">Recipes Cooked</div>
+                                    <div class="stat-trend positive">+12% from last week</div>
+                                </div>
+                            </div>
+                            <div class="analytics-stat">
+                                <div class="stat-icon green"><i class="fas fa-clock"></i></div>
+                                <div class="stat-details">
+                                    <div class="stat-value">8.5 hrs</div>
+                                    <div class="stat-label">Time Cooking</div>
+                                    <div class="stat-trend positive">+3.2 hrs from last week</div>
+                                </div>
+                            </div>
+                            <div class="analytics-stat">
+                                <div class="stat-icon orange"><i class="fas fa-shopping-basket"></i></div>
+                                <div class="stat-details">
+                                    <div class="stat-value">$142</div>
+                                    <div class="stat-label">Money Saved</div>
+                                    <div class="stat-trend positive">+$34 from last week</div>
+                                </div>
+                            </div>
+                            <div class="analytics-stat">
+                                <div class="stat-icon blue"><i class="fas fa-leaf"></i></div>
+                                <div class="stat-details">
+                                    <div class="stat-value">89%</div>
+                                    <div class="stat-label">Waste Reduction</div>
+                                    <div class="stat-trend positive">+5% from last week</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-placeholder">
+                            <canvas id="activityChart" height="200"></canvas>
+                        </div>
+
+                        <div class="detailed-stats">
+                            <h3 style="color: white;"><i class="fas fa-list"></i> Detailed Breakdown</h3>
+                            <div class="stats-table">
+                                <div class="stat-row">
+                                    <span class="stat-category">Most Cooked Cuisine</span>
+                                    <span class="stat-value-text">Italian (8 recipes)</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-category">Favorite Recipe</span>
+                                    <span class="stat-value-text">Pasta Carbonara (3x)</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-category">Avg. Cooking Time</span>
+                                    <span class="stat-value-text">22 minutes</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-category">Ingredients Used</span>
+                                    <span class="stat-value-text">47 unique items</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-category">Meal Prep Days</span>
+                                    <span class="stat-value-text">4 days this week</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-category">Calories Tracked</span>
+                                    <span class="stat-value-text">~12,400 cal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekly Goals -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-bullseye"></i> Weekly Goals</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="goal-item">
+                            <div class="goal-info">
+                                <span class="goal-name">Cook 5 New Recipes</span>
+                                <span class="goal-progress-text">3/5 completed</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-info">
+                                <span class="goal-name">Use All Groceries</span>
+                                <span class="goal-progress-text">85% used</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            <div class="goal-info">
+                                <span class="goal-name">Meal Prep Sunday</span>
+                                <span class="goal-progress-text">Completed ✓</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-trophy"></i> Recent Achievements</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🏆</div>
+                            <div class="achievement-info">
+                                <div class="achievement-name">Chef Extraordinaire</div>
+                                <div class="achievement-desc">Cooked 20+ recipes this month</div>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">🌱</div>
+                            <div class="achievement-info">
+                                <div class="achievement-name">Eco Warrior</div>
+                                <div class="achievement-desc">Reduced waste by 80%+</div>
+                            </div>
+                        </div>
+                        <div class="achievement-item">
+                            <div class="achievement-icon">💰</div>
+                            <div class="achievement-info">
+                                <div class="achievement-name">Budget Master</div>
+                                <div class="achievement-desc">Saved $100+ this month</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="profilescript.js"></script>
+    <script type="module" src="voicecommand-standalone.js"></script>
+    <script>
+        // Simple chart rendering using Canvas
+        const ctx = document.getElementById('activityChart').getContext('2d');
+        const chartData = {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            values: [2, 3, 1, 4, 2, 5, 6]
+        };
+
+        // Draw simple bar chart
+        function drawChart() {
+            const canvas = document.getElementById('activityChart');
+            const padding = 40;
+            const barWidth = 40;
+            const maxValue = Math.max(...chartData.values);
+            const chartHeight = canvas.height - padding * 2;
+            const chartWidth = canvas.width - padding * 2;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw bars
+            chartData.values.forEach((value, index) => {
+                const barHeight = (value / maxValue) * chartHeight;
+                const x = padding + (index * (chartWidth / chartData.values.length)) + (chartWidth / chartData.values.length - barWidth) / 2;
+                const y = canvas.height - padding - barHeight;
+
+                // Bar
+                ctx.fillStyle = '#3FF67C';
+                ctx.fillRect(x, y, barWidth, barHeight);
+
+                // Label
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(chartData.labels[index], x + barWidth / 2, canvas.height - padding + 20);
+
+                // Value
+                ctx.fillStyle = '#333';
+                ctx.fillText(value, x + barWidth / 2, y - 10);
+            });
+
+            // Y-axis
+            ctx.strokeStyle = '#ddd';
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.stroke();
+
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+        }
+
+        // Draw chart on load
+        window.addEventListener('load', drawChart);
+        window.addEventListener('resize', drawChart);
+
+        // Time filter functionality
+        document.getElementById('timeFilter').addEventListener('change', function() {
+            // Update chart data based on selection
+            console.log('Time filter changed to:', this.value);
+            // In a real app, you would fetch new data and redraw the chart
+        });
+
+        // Navbar button handlers
+        document.getElementById('homeBtn').addEventListener('click', function() {
+            window.location.href = 'profile.html';
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            window.location.href = 'test.html';
+        });
+
+        document.getElementById('settingsBtn').addEventListener('click', function() {
+            alert('Settings page coming soon!');
+        });
+    </script>
+</body>
+</html>

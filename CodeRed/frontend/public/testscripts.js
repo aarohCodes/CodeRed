@@ -129,10 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Event listeners for buttons that open modal
-    if (loginBtn) {
-        loginBtn.addEventListener('click', openModal);
-    }
-
+    // loginBtn now opens the sign-in popup (handled in test.html inline script)
+    // Keep startReadingBtn to open the signup modal
     if (startReadingBtn) {
         startReadingBtn.addEventListener('click', openModal);
     }
@@ -241,10 +239,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Handle Sign In button click
+    // Handle Sign In button click inside the modal
     if (signinBtn) {
         signinBtn.addEventListener('click', function() {
-            window.location.href = '/Dashboard.html';
+            // Close the auth modal
+            closeModalFunc();
+            // Open the sign-in popup
+            const signInModal = document.getElementById('signInModal');
+            if (signInModal) {
+                signInModal.style.display = 'flex';
+            }
         });
     }
 

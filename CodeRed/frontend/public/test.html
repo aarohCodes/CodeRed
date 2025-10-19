@@ -53,9 +53,13 @@
                     </div>
                 </div>
                 <div class="hero-visual">
+                    <div class="floating-card" onclick="window.location.href='Dashboard.html'" style="cursor: pointer;">
+                        <i class="fas fa-laptop"></i>
+                        <span>Upcoming Features</span>
+                    </div>
                     <div class="floating-card">
                         <i class="fas fa-book-open"></i>
-                        <span>Upcoming Features</span>
+                        <span>Further Reading</span>
                     </div>
 
                 </div>
@@ -323,6 +327,107 @@
             </div>
         </div>
 
+        <!-- Sign In Modal -->
+        <div id="signInModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+            <div style="background: white; border-radius: 20px; padding: 2.5rem; max-width: 400px; width: 90%; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                <button id="closeModal" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: #666; cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.3s ease;">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🍳</div>
+                    <h2 style="color: #1a1a1a; margin-bottom: 0.5rem; font-size: 1.75rem;">Welcome Back!</h2>
+                    <p style="color: #666; font-size: 0.875rem;">Sign in to access your kitchen dashboard</p>
+                </div>
+
+                <form id="signInForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="username" style="color: #1a1a1a; font-weight: 600; font-size: 0.875rem;">Name</label>
+                        <input type="text" id="username" name="username" required style="padding: 0.75rem 1rem; border: 2px solid #e5e5e5; border-radius: 10px; font-size: 1rem; font-family: 'Atkinson Hyperlegible', sans-serif; transition: all 0.3s ease;">
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="password" style="color: #1a1a1a; font-weight: 600; font-size: 0.875rem;">Password</label>
+                        <input type="password" id="password" name="password" required style="padding: 0.75rem 1rem; border: 2px solid #e5e5e5; border-radius: 10px; font-size: 1rem; font-family: 'Atkinson Hyperlegible', sans-serif; transition: all 0.3s ease;">
+                    </div>
+
+                    <button type="submit" style="padding: 1rem; background: #3FF67C; color: white; border: none; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: 'Atkinson Hyperlegible', sans-serif;">
+                        Sign In
+                        <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </button>
+
+                    <div style="text-align: center; margin-top: 0.5rem;">
+                        <a href="#" style="color: #3FF67C; text-decoration: none; font-size: 0.875rem; font-weight: 600;">Forgot password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <script src="testscripts.js"></script>
+        <script>
+            // Sign In Modal functionality
+            const loginBtn = document.getElementById('loginBtn');
+            const signInModal = document.getElementById('signInModal');
+            const closeModal = document.getElementById('closeModal');
+            const signInForm = document.getElementById('signInForm');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            // Open modal when login button is clicked
+            if (loginBtn) {
+                loginBtn.addEventListener('click', () => {
+                    signInModal.style.display = 'flex';
+                });
+            }
+
+            // Close modal
+            closeModal.addEventListener('click', () => {
+                signInModal.style.display = 'none';
+                signInForm.reset();
+            });
+
+            // Close modal when clicking outside
+            signInModal.addEventListener('click', (e) => {
+                if (e.target === signInModal) {
+                    signInModal.style.display = 'none';
+                    signInForm.reset();
+                }
+            });
+
+            // Handle form submission
+            signInForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                
+                // Here you can add authentication logic
+                console.log('Sign in attempt:', { username, password });
+                
+                // Redirect to profile page
+                window.location.href = 'profile.html';
+            });
+
+            // Input focus effects
+            const inputs = document.querySelectorAll('#signInModal input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.borderColor = '#3FF67C';
+                    input.style.outline = 'none';
+                });
+                input.addEventListener('blur', () => {
+                    input.style.borderColor = '#e5e5e5';
+                });
+            });
+
+            // Close modal button hover effect
+            closeModal.addEventListener('mouseenter', () => {
+                closeModal.style.background = '#f0f0f0';
+                closeModal.style.color = '#3FF67C';
+            });
+            closeModal.addEventListener('mouseleave', () => {
+                closeModal.style.background = 'none';
+                closeModal.style.color = '#666';
+            });
+        </script>
     </body>
 </html>

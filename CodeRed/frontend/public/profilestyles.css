@@ -6,31 +6,34 @@
 }
 
 :root {
-    /* New Color Palette */
-    --primary-orange: #F68E3F;
-    --secondary-orange: #FEF9CF;
-    --dark-orange: #D47533;
-    --accent-coral: #F289AB;
-    --dark-coral: #C26D8C;
-    --light-orange: #f9f0ea;
-    --cream: #f9f0ea;
-    --cyan: #67CDF6;
-    --green: #8AC641;
+    /* New Color Palette - Matching test.html */
+    --primary-orange: #3FF67C;
+    --secondary-orange: #CEFEDE;
+    --dark-orange: #33D368;
+    --accent-coral: #89F2CF;
+    --dark-coral: #6DC2A5;
+    --light-orange: #E9F9EE;
+    --cream: #F3F9E9;
+    --cyan: #66CDF6;
+    --green: #89C541;
     --text-primary: #2D2D2D;
     --text-secondary: #5A5A5A;
-    --background: #f9f0ea;
-    --card-background: #FFFFFF;
+    --background: #14532d;
+    --card-background: #ffffff;
     --border: #FEF9CF;
-    --shadow: 0 4px 12px rgba(246, 142, 63, 0.08);
-    --shadow-md: 0 8px 16px rgba(246, 142, 63, 0.12);
-    --shadow-lg: 0 12px 24px rgba(246, 142, 63, 0.15);
+    --shadow: 0 8px 16px rgba(63, 246, 124, 0.12);
+    --shadow-md: 0 12px 20px rgba(63, 246, 124, 0.15);
+    --shadow-lg: 0 20px 40px rgba(63, 246, 124, 0.18);
 }
 
 body {
     font-family: 'Atkinson Hyperlegible', sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
-    background: var(--background);
+    background: 
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        linear-gradient(to bottom, #14532d, #14532d, #14532d);
+    background-attachment: fixed;
     overflow-x: hidden;
 }
 
@@ -81,7 +84,7 @@ body {
 
 .nav-logo .logo-icon-img {
     height: 35px;
-    width: 35px;
+    width: 94px;
     object-fit: contain;
     margin-right: 0.5rem;
 }

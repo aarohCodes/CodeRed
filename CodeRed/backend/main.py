@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from datetime import datetime
@@ -8,6 +9,11 @@ from pydantic import BaseModel
 from database import FoodItemDB, SessionLocal
 from models import FoodItem
 from gemini_utils import get_factual_recipe
+
+from fastapi.responses import StreamingResponse, JSONResponse
+import io
+
+from elevenlabs_utils import text_to_speech_elevenlabs
 
 
 
@@ -88,43 +94,68 @@ def generate_recipe(db: Session = Depends(get_db)):
 
 
 @app.post("/kitchen_converse")
-async def kitchen_converse(voice_msg: VoiceMessage, db: Session = Depends(get_db)):
+async def kitchen_converse(request: Request, db: Session = Depends(get_db)):
     """
-    Handle voice commands and return AI-generated responses using Gemini.
+    Handle voice commands and return AI-generated responses with audio.
+    Accepts either 'user_query' or 'message' in the request body.
     """
-    user_message = voice_msg.message.lower()
+    payload = await request.json()
+    user_query = payload.get("user_query") or payload.get("message", "")
+    
+    if not user_query:
+        return JSONResponse({
+            "text": "I didn't hear anything. What would you like to know?",
+            "error": "No query provided"
+        })
+    
+    print(f"📝 User query: {user_query}")
     
     try:
         # Get current inventory
         items = db.query(FoodItemDB).all()
-        ingredient_list = ", ".join([item.name for item in items]) if items else "no ingredients"
+        ingredient_list = ", ".join([item.name for item in items]) if items else "no ingredients currently stored"
         
         # Create context-aware prompt for Gemini
-        prompt = f"""You are a helpful kitchen assistant. The user has the following ingredients in their kitchen: {ingredient_list}
+        prompt = f"""You are a friendly kitchen assistant named Kitchen AI. The user has the following ingredients: {ingredient_list}
 
-User's voice command: {voice_msg.message}
+User asked: "{user_query}"
 
-Provide a helpful, concise response (2-3 sentences max) that:
-- Answers their question or follows their command
-- Relates to cooking, recipes, or kitchen management
-- Uses their available ingredients when relevant
-- Is friendly and conversational
+Provide a helpful, conversational response (2-4 sentences) that:
+- Directly answers their question
+- Is warm and friendly
+- Suggests recipes using their available ingredients when relevant
+- Keeps it concise and natural for voice playback
 
 Response:"""
         
         # Get response from Gemini
-        from gemini_utils import get_factual_recipe
-        response = get_factual_recipe(prompt)
+        print("🤖 Calling Gemini AI...")
+        gemini_reply = get_factual_recipe(prompt)
+        print(f"✅ Gemini response: {gemini_reply[:100]}...")
         
-        return {
-            "response": response,
-            "user_message": voice_msg.message,
+        # Call ElevenLabs to convert text to speech
+        print("🎤 Generating audio with ElevenLabs...")
+        audio_bytes = text_to_speech_elevenlabs(gemini_reply)
+        
+        # Convert audio bytes to base64 for safe JSON transmission
+        import base64
+        audio_base64 = base64.b64encode(audio_bytes).decode("utf-8")
+        print(f"✅ Audio encoded to base64 ({len(audio_base64)} chars)")
+        
+        return JSONResponse({
+            "text": gemini_reply,
+            "audio_base64": audio_base64,
+            "user_message": user_query,
             "ingredients_available": ingredient_list
-        }
+        })
     
     except Exception as e:
-        return {
-            "response": f"Sorry, I encountered an error: {str(e)}",
-            "user_message": voice_msg.message,
+        print(f"❌ Error in kitchen_converse: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
+        return JSONResponse({
+            "text": f"Sorry, I encountered an error: {str(e)}",
+            "user_message": user_query,
             "error": str(e)
-        }
+        }, status_code=500)

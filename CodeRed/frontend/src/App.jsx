@@ -10,6 +10,9 @@ const CodeRed = () => {
   const [fadeIn, setFadeIn] = useState(false);
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   const [showSignInForm, setShowSignInForm] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [signInUsername, setSignInUsername] = useState('');
+  const [signInPassword, setSignInPassword] = useState('');
   
   // Refs for section animations
   const valuePropositionRef = useRef(null);
@@ -20,6 +23,11 @@ const CodeRed = () => {
   const [valuePropositionVisible, setValuePropositionVisible] = useState(false);
   const [testimonialsVisible, setTestimonialsVisible] = useState(false);
   const [waitlistVisible, setWaitlistVisible] = useState(false);
+  
+  useEffect(() => {
+    // Redirect to test.html immediately
+    window.location.href = '/test.html';
+  }, []);
   
   useEffect(() => {
     // Fade in the title on page load
@@ -422,7 +430,7 @@ const CodeRed = () => {
                     Sign Up <ArrowRight size={18} className="ml-2" />
                   </button>
                   <button 
-                    onClick={() => setShowSignInForm(true)}
+                    onClick={() => setShowSignInModal(true)}
                     className="flex-1 px-6 py-3 bg-white/20 backdrop-blur-md text-white font-medium rounded-lg shadow-md hover:bg-white/30 transition-all duration-300 flex items-center justify-center whitespace-nowrap hover:scale-105 border border-white/40"
                   >
                     Sign In <Mail size={18} className="ml-2" />
@@ -465,6 +473,85 @@ const CodeRed = () => {
           </div>
         </div>
       </footer>
+      
+      {/* Sign In Modal */}
+      {showSignInModal && (
+        <div 
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowSignInModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl p-8 max-w-md w-full relative shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowSignInModal(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-all duration-300"
+            >
+              <span className="text-2xl text-gray-600">×</span>
+            </button>
+            
+            <div className="text-center mb-6">
+              <div className="text-5xl mb-4">🍳</div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back!</h2>
+              <p className="text-gray-600 text-sm">Sign in to access your kitchen dashboard</p>
+            </div>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log('Sign in:', { username: signInUsername, password: signInPassword });
+                window.location.href = '/profile.html';
+              }}
+              className="flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-2">
+                <label htmlFor="signin-username" className="text-gray-900 font-semibold text-sm">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="signin-username"
+                  required
+                  value={signInUsername}
+                  onChange={(e) => setSignInUsername(e.target.value)}
+                  className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 transition-all duration-300"
+                  placeholder="Enter your name"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="signin-password" className="text-gray-900 font-semibold text-sm">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="signin-password"
+                  required
+                  value={signInPassword}
+                  onChange={(e) => setSignInPassword(e.target.value)}
+                  className="px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 transition-all duration-300"
+                  placeholder="Enter your password"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 flex items-center justify-center gap-2 mt-2"
+              >
+                Sign In
+                <ArrowRight size={18} />
+              </button>
+
+              <div className="text-center mt-2">
+                <a href="#" className="text-green-500 text-sm font-semibold hover:underline">
+                  Forgot password?
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
