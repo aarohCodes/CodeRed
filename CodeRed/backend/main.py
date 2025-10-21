@@ -68,6 +68,7 @@ def add_food(item: FoodItem, db: Session = Depends(get_db)):
     
     # Convert SQLAlchemy model to Pydantic model
     return FoodItem(
+        id=db_item.id,
         name=db_item.name,
         quantity=db_item.quantity,
         expiry_date=db_item.expiry_date,
@@ -97,11 +98,23 @@ def get_inventory(db: Session = Depends(get_db)):
     items = db.query(FoodItemDB).all()
     # Convert SQLAlchemy models to Pydantic models
     return [FoodItem(
+                id=item.id,
                 name=item.name,
                 quantity=item.quantity,
                 expiry_date=item.expiry_date if item.expiry_date else None,
                 user_id=str(item.user_id)
            ) for item in items]
+
+
+@app.delete("/delete_food/{item_id}")
+def delete_food(item_id: int, db: Session = Depends(get_db)):
+    item = db.query(FoodItemDB).filter(FoodItemDB.id == item_id).first()
+    if item is None:
+        return {"error": "Item not found"}, 404
+    
+    db.delete(item)
+    db.commit()
+    return {"message": "Item deleted successfully", "item_id": item_id}
 
 from gemini_utils import get_factual_recipe
 

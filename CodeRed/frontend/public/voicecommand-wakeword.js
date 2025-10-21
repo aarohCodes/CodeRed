@@ -849,7 +849,10 @@ class VoiceCommandWakeWord {
   }
 
   formatAIResponse(text) {
-    // Escape HTML first
+    // First, convert literal \n characters to actual newlines
+    text = text.replace(/\\n/g, '\n');
+    
+    // Escape HTML to prevent XSS
     text = this.escapeHtml(text);
     
     // Convert markdown-style formatting to HTML
@@ -857,27 +860,35 @@ class VoiceCommandWakeWord {
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     text = text.replace(/__(.*?)__/g, '<strong>$1</strong>');
     
-    // Italic text: *text* or _text_
-    text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    text = text.replace(/_(.*?)_/g, '<em>$1</em>');
+    // Italic text: *text* or _text_ (but not in URLs or filenames)
+    text = text.replace(/(?<!\w)\*([^*]+?)\*(?!\w)/g, '<em>$1</em>');
+    text = text.replace(/(?<!\w)_([^_]+?)_(?!\w)/g, '<em>$1</em>');
     
-    // Line breaks
-    text = text.replace(/\n\n/g, '</p><p>');
+    // Convert double line breaks to paragraph breaks
+    text = text.replace(/\n\n+/g, '</p><p>');
+    
+    // Convert single line breaks to <br>
     text = text.replace(/\n/g, '<br>');
     
     // Wrap in paragraph
     text = '<p>' + text + '</p>';
     
-    // Convert numbered lists
-    text = text.replace(/(\d+\.\s.*?)(?=<br>|<\/p>)/g, '<li>$1</li>');
+    // Clean up empty paragraphs
+    text = text.replace(/<p><\/p>/g, '');
+    text = text.replace(/<p>\s*<\/p>/g, '');
+    
+    // Convert numbered lists (1. 2. 3.)
+    text = text.replace(/(\d+\.\s+[^<]+?)(?=<br>|<\/p>)/g, '<li>$1</li>');
     if (text.includes('<li>')) {
-      text = text.replace(/(<li>.*?<\/li>)/s, '<ol>$1</ol>');
+      text = text.replace(/(<li>[\s\S]*?<\/li>)/g, '<ol>$1</ol>');
+      text = text.replace(/<\/ol>\s*<br>\s*<ol>/g, ''); // Merge consecutive lists
     }
     
-    // Convert bullet lists
-    text = text.replace(/([-•]\s.*?)(?=<br>|<\/p>)/g, '<li>$1</li>');
+    // Convert bullet lists (- or •)
+    text = text.replace(/([-•]\s+[^<]+?)(?=<br>|<\/p>)/g, '<li>$1</li>');
     if (text.includes('<li>-') || text.includes('<li>•')) {
-      text = text.replace(/(<li>.*?<\/li>)/s, '<ul>$1</ul>');
+      text = text.replace(/(<li>[-•][\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+      text = text.replace(/<\/ul>\s*<br>\s*<ul>/g, ''); // Merge consecutive lists
     }
     
     return text;
